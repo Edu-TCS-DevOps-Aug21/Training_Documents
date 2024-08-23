@@ -605,3 +605,268 @@ Day - 2 | 22nd Aug. 2024
 
 Next :::		
 	Git Branching Techniques ::::
+
+
+#########################
+Day - 3 | 23rd Aug. 2024
+#########################				
+		
+Git Branching Techniques ::::
+
+	- GIT Branches are used to perform parallel development
+	- Branches are the logical copy of the repo.(Default Branch - master)
+	- master/main branch --> Default ref to production version of source code. 
+	
+Create Branch ::
+
+	git branch 				# To list the branches 
+	
+	git branch feature1 	# To create a branch 
+	
+	git switch -c feature2	# To Create a branch 
+
+
+	git switch feature1
+	
+	echo "rec1" >> q1.txt 
+	
+	git add 
+	
+	git commit -m "adf"
+	
+	git log --online 
+	
+	git switch master 
+	
+	git merge feature1			# Should be executed from the target branch 
+	
+	git rebase 					# Should be executed from the current branch 
+								# It is used to keep the current branch in sync with target branch 
+								# GIT Rebase is used to maintain the linear commit history
+								
+								# It helps to prevent merge conflicts in the target(master) branch.
+
+	Repo1: 
+	
+		master : cm1,cm2,cm3
+		
+					cm1,cm2,cm3,f1cm1,f1mc2					# Regular Merge from feature1
+					
+					cm1,cm2,cm3,f1cm1,f1mc2,f2cm1,f2mc2		# Expected Linear/Sequential Commit History
+					
+					cm1,cm2,cm3,f2cm1,f2mc2,f1cm1,f1mc2		# Regular Merge from feature2
+					
+					cm1,cm2,cm3,f1cm1,f1mc2,f2cm1,f2mc2		# Upon proper rebase!
+		
+			feature1 : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f1cm1,f1mc2
+						
+							git switch master 
+							
+							git merge feature1
+			
+			feature2 : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f2cm1,f2mc2
+						
+							git switch master 
+							
+							git merge feature2
+							
+							
+			Using REBASE :::
+			
+			feature2 : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f2cm1,f2mc2
+						
+							git rebase master 
+						
+							cm1,cm2,cm3,f1cm1,f1mc2,f2cm1,f2mc2
+							
+							git switch master 
+							
+							git merge feature2						
+	
+	Merge Conflict :::
+	
+		- Occurs when more than one user/feature try to update the same file at same record level.
+		
+		
+	How to fix the conflict :::
+	
+		- Identify the file(s) causing merge conflict
+		- Open that file and review the changes 
+		- Decide which feature/User's changes to be retained/removed
+		- Update that file accordingly, Remove the header and footer text and save
+		- Add and commit the changes in the target branch
+	
+	Prevent Merge Conflict :::
+	
+		- Collaborate with the Team, Review the changes before merge!
+		
+		
+	
+	GIT Branching Strategies ::::
+	
+		- It is used to maintain the integrity of the master branch.
+		
+		
+	Scenario 1 :
+	
+		Repo1:
+			master : cm1,cm2,cm3
+			
+						cm1,cm2,cm3,f1cm1,f1cm2
+			
+				feature1 : cm1,cm2,cm3,f1cm1,f1cm2
+		
+		
+	Scenario 2 :
+	
+		Repo1:
+			master : rel1,rel2,rel3		
+						rel1,rel2,rel3,rel4				# rel4 is the commit merged from Developer_Branch
+			
+				Developer_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+				
+					feature1 : rel1,rel2,rel3
+								rel1,rel2,rel3,f1cm1,f1cm2
+					
+					feature2 : rel1,rel2,rel3
+								rel1,rel2,rel3,f2cm1,f2cm2
+								
+	Scenario 3 :
+	
+		Repo1:
+			master : rel1,rel2,rel3		
+						rel1,rel2,rel3,rel4				# rel4 is the commit merged from Integration_Branch
+						
+				Integration_Branch : rel1,rel2,rel3,Developer1_Changes,Developer2_Changes
+			
+					Developer1_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+					
+						feature1 : rel1,rel2,rel3
+									rel1,rel2,rel3,f1cm1,f1cm2
+						
+						feature2 : rel1,rel2,rel3
+									rel1,rel2,rel3,f2cm1,f2cm2
+
+					Developer2_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+					
+						feature1 : rel1,rel2,rel3
+									rel1,rel2,rel3,f1cm1,f1cm2
+						
+						feature2 : rel1,rel2,rel3
+									rel1,rel2,rel3,f2cm1,f2cm2
+									
+	Scenario 4 :
+	
+		Repo1:
+			master : rel1,rel2,rel3		
+						rel1,rel2,rel3,rel4				# rel4 is the commit merged from Release_Branch
+						
+				Release_Branch : rel1,rel2,rel3,Team1_Changes,Team2_changes
+						
+					Integration_Branch1 : rel1,rel2,rel3,Developer1_Changes,Developer2_Changes				# Team1
+				
+						Developer1_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+						
+							feature1 : rel1,rel2,rel3
+										rel1,rel2,rel3,f1cm1,f1cm2
+							
+							feature2 : rel1,rel2,rel3
+										rel1,rel2,rel3,f2cm1,f2cm2
+
+						Developer2_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+						
+							feature1 : rel1,rel2,rel3
+										rel1,rel2,rel3,f1cm1,f1cm2
+							
+							feature2 : rel1,rel2,rel3
+										rel1,rel2,rel3,f2cm1,f2cm2
+										
+					Integration_Branch2 : rel1,rel2,rel3,Developer1_Changes,Developer2_Changes				# Team2
+				
+						Developer1_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+						
+							feature1 : rel1,rel2,rel3
+										rel1,rel2,rel3,f1cm1,f1cm2
+							
+							feature2 : rel1,rel2,rel3
+										rel1,rel2,rel3,f2cm1,f2cm2
+
+						Developer2_Branch: rel1,rel2,rel3,f1cm1,f1cm2,f2cm1,f2cm2
+						
+							feature1 : rel1,rel2,rel3
+										rel1,rel2,rel3,f1cm1,f1cm2
+							
+							feature2 : rel1,rel2,rel3
+										rel1,rel2,rel3,f2cm1,f2cm2
+										
+										
+	git merge ::
+	
+	git squash --option ::::
+	
+		- It is used to combine the more than one commit points into one commit point.
+		
+		
+	git cherry-pick :::
+	
+		- Used to merge the specific commit into the target branch 
+		
+		git cherry-pick <commit_id> <commit_id>
+		
+	
+	GIT STASH :::
+	
+	
+		- Used to save the uncommitted changes to a temporary area.
+		
+		
+		git stash save "<ref_message>
+		
+		git stash list 					# Used to get the entries from stash list
+		
+		git stash apply 				# Used to copy/apply the latest entry back to staging area.
+										# That enrty will not be removed from the list.
+		git stash apply stash@{2}		# Apply specific entry 
+	
+		git stash drop 					# Delete the latest entry from stash list 
+		
+		git stash drop stash@{2}		# Drop specific entry
+		
+		git stash pop 					# Used to move the latest entry back to staging area.
+		git stash pop stash@{3}			# Used to move specific entry back to staging area.
+		
+		git stash clear 				# Clean-up the entire stash list.
+		
+		
+	Remote Repositories ::::
+	
+	
+		Pull Request --> Created by the Developer to get approvals for merging into master branch
+
+	git clone				# Used to Clone/Copy the entire remote repo to the local machine 
+	
+	git add 				# Used to add the changes from working directory to staging area 
+	
+	git commit 				# Used to permanently create a commit from staging to the local repo.
+	
+	git push				# Used to push the changes from local repo. to remote repo.
+	
+	git fetch/git pull :
+			- Both git fetch and git pull are used to handle the incremental changes from remote repo to local machine.
+			
+			- GIT FETCH ==> It is just to check for incremental changes in remote repo. If any incremental changes exist, it will update the details only in the local repo. The Changes will not be updated in the working directory.
+			
+			- GIT PULL ==> It is to check for incremental changes in remote repo. If any incremental changes exist, it will update the details in the local repo. as well as the Changes will be updated in the working directory.	
+
+				- git pull == git fetch + git merge 
+				
+				
+				
+	git clone https://github.com/Edu-TCS-DevOps-Aug21/testrepo1.git
+	
