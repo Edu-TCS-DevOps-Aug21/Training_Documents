@@ -1,0 +1,123 @@
+#########################
+Day - 4 | 26th Aug. 2024
+#########################
+
+Configuration Management Using Ansible ::::
+
+IAC Tools --> Infra-Structure As Code
+
+	Ansible - Is an IAC Tool used for Configuration Management
+	
+	
+	Why Ansible ?
+	
+	Architecture 
+	
+	Ansible Components 
+	
+		- Ansible Controller 
+		- Ansible Nodes 
+		- Inventory 
+		- Modules 
+		- ansible.cfg
+		
+		Ansible Roles :
+			- It is used to organise/share the Ansible Components 
+	
+	Install Ansible 
+	
+	Interact with Ansible 
+	
+		Ansible Adhoc Command - cli 
+			- It is used to execute a Ansible Module in the Ansible Nodes
+			- It cannot be reusable 
+			
+			Eg.: apt is Ansible Module 
+			
+			apt install git 
+		
+		Playbooks 
+		
+			- It is used to execute some series of Ansible Modules in the Ansible Nodes
+			- Playbooks should be reusable 
+			- Playbooks are written using *.yaml Scripts 
+			
+			
+			- Install Pre-requisities 
+			- Install actual package 
+			- Perform Post-Installation Activities 
+			
+			
+			MySQL DB : 1 Ansible Node 
+			
+			- Install Pre-requisities 
+			- Install MySQL Package
+			- Establish Connection to MySQL DB
+			- Create a Database 
+			
+			Test_Server ::
+			
+			Web Application Server - Tomcat / Nginx (WAS)
+			
+			
+			- Install jdk 
+			- Setup JDK Environment Variables 
+			- Install Tomcat Server 
+			- Start Tomcat Server 
+		
+		
+		SSH Authentication (Secure SHell)
+		
+			- Host_Name 
+			- User_Name
+			- Credentials
+			
+			
+			Authentication Methods ::
+			
+				- Password based Authentication
+				- Key Based Authentication 
+					- Key Pair :
+						- Public_Key 
+						- Private_Key
+				- Token Based Authentication
+				- Passwordless Authentication
+			
+	Install and Configure Ansible Controller and Nodes :::
+	
+	Login to AWS Console :
+	
+		- Virtual Machines -- EC2 Instances 
+		
+		- Choose the AMI  Ubuntu - v22.04
+		
+		
+	Connect to EC2 Instances :::
+	
+		- EC2 Instance Connect using web browser
+		- SSH Client :				Linux / Mac Users 
+				Open an SSH client.
+				Locate your private key file. The key used to launch this instance is may20-keypair.pem
+				Run this command, if necessary, to ensure your key is not publicly viewable.
+				chmod 400 "may20-keypair.pem"
+				Connect to your instance using its Public DNS:
+					ec2-52-66-214-172.ap-south-1.compute.amazonaws.com
+
+				Example:
+					ssh -i "may20-keypair.pem" ubuntu@ec2-52-66-214-172.ap-south-1.compute.amazonaws.com
+					
+		- SSH Agents :
+			Putty / MobaXterm 	==> Windows User 
+			
+	
+	Working with Ansible Adhoc Commands :::
+	
+	
+	Playbooks:
+	
+		Variables :
+		
+			Environment Variables - Ansible Facts 
+			
+			User Defined Variables 
+	
