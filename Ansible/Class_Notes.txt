@@ -121,3 +121,20 @@ IAC Tools --> Infra-Structure As Code
 			
 			User Defined Variables 
 	
+#########################
+Day - 5 | 27th Aug. 2024
+#########################			
+	
+		- User Defined Variables 
+		
+		- When Conditions 
+		
+		- Register
+		
+			- Register is used to register the outcome of the module into a varible.
+			
+			shell 
+			
+			
+		Ansible Roles !
+		
