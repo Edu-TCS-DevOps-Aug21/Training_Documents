@@ -1,0 +1,147 @@
+		
+#########################
+Day - 5 | 27th Aug. 2024
+#########################			
+
+	Containerization Using Docker !
+	
+	- Containerization :
+		- It is a process of packaging the applications along with its dependencies.
+		
+		
+		Docker Container!
+		
+	Deployments ::
+
+		
+			Dev 	--> Developers!		mywebappl
+			
+				Create the src code!
+				
+				
+			Build 
+				Compile & Create Artifacts --> mywebappl_svc1.war
+				
+				Unit Level Testing 
+				
+				Tomcat Web Application Server - mywebappl_svc1.war
+					
+					jdk_v11, tomcat:8.5 ==> mywebappl_svc1.war
+					
+					
+					Package mywebappl_svc1.war 
+					
+					--> Create Application Image (mywebappl_svc1.war,jdk11,tomcat8.5)  
+
+						mywebappl_svc1_img
+						
+					--> Publish mywebappl_svc1_img to the Container Registry 
+					
+				Promote mywebappl_svc1.war to Test Environment
+				
+			Test 
+			
+				QA  ========== mywebappl_svc1.war
+				
+					Pull that mywebappl_svc1_img from Container Registry 
+					
+					And Execute it as a Container.
+				
+				UAT ========== mywebappl_svc1.war
+				
+			Prod 
+			
+				    ========== mywebappl_svc1.war
+		
+	What is Virtual Machine ??
+	
+	- VMs are Hardware Level Virutualization
+	- VMs are Created using Hypervisor 
+	- VMs are used to run the Operating System by default 
+	- VMs Consume more space and time to start up
+	- VMs will continue to run even if there is no active task or application
+
+	What is Container ?
+	
+	- Containers are OS Level Virutualization
+	- Containers are Created using Container Engine 
+	- Containers are used to run the Applications/Tasks. Not Operating System
+	- Containers will immediately go to EXIT State if there is NO Active task or application
+	- Containers Consume Less space and time to start up
+	- Containers uses the Core of Operating System
+		This is provide an isolated environment to the containers 
+		- Kernel 
+			- NameSpace  
+			- Control Group(CGroup)			
+	- Containers are used to reduce the number of VMs. 
+			
+
+	Terminologies ::
+		
+		Container Engine 	
+			- To Manage the Container Images and Containers 
+
+		Container Images 
+			- Is a Static File, that defines the properties of Container
+			- It is non-executable 
+			- It composed of Various Layers
+			- These Layers are created by using the Dockerfile Instructions
+			
+		Containers 
+			- Containers are the executable units of Container Image 
+			
+		
+		Container Registry
+			- Used to Store and Manage the Container Images
+				dockerhub
+				ACR
+				ECR 
+			
+		Container Repositories
+			- Sub-Set of Container Registry
+			
+	Working with Docker Containers ::
+	
+	Install Docker Engine :
+	
+		https://docs.docker.com/engine/install/
+		
+			sudo apt install docker.io
+	
+	Docker Cli Commands
+	
+	
+	docker images		# List Images 
+	
+	docker ps 			# List Active Containers
+	
+	docker ps -a 		# List All Containers
+	
+	docker pull 		# Download Container Image from Container Registry to Local Machine
+	
+	docker run 			# Create and Run the Container
+	
+	Docker Run Mode :::
+	
+		- Foreground/Attached Mode 			# Default 
+		
+			docker run centos 
+			
+			docker run centos sleep 20
+			
+		
+		- Background/Detached Mode 
+		
+			docker run -d centos 
+			
+		- Interactive Mode 
+		
+			docker run -it centos bash 
+			
+			
+			
+	AMI ::
+	
+		Server Template 
+		
+		Ubuntu -- + + packge 
