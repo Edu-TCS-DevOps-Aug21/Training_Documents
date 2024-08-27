@@ -301,3 +301,289 @@ key:Value pair
        - "THe value of my_num: {{my_num}}"
        - "The value of my_name : {{my_name}}"
        - "THe value of my_b is: {{my_b}}"
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#/etc/ansible/variables/myvarfile1.yaml
+    x: 23
+    my_num: 45.67
+    my_name: Loksai_ETA
+    my_b: YES
+
+#test_var-datatype1.yaml
+---
+ - hosts: samplenode1
+   vars_files:
+     - /etc/ansible/variables/myvarfile1.yaml
+   tasks:
+   - debug:
+      msg:
+       - "The value of x is: {{x}}"
+       - "THe value of my_num: {{my_num}}"
+       - "The value of my_name : {{my_name}}"
+       - "THe value of my_b is: {{my_b}}"
+
+##########################################################
+
+---
+ - hosts: testnodes
+   gather_facts: false
+   become: yes
+   tasks:
+   - name: Manage nginx tool
+     apt:
+       name: nginx
+       state: present
+
+############################################################
+
+
+
+#var4.yaml
+---
+ - hosts: "{{ host_name }}"
+   become: yes
+   tasks:
+   - name: Manage "{{ tool_name }}" service
+     apt:
+       name: "{{ tool_name }}"
+       state: "{{ tool_state }}"
+
+
+
+ansible-playbook var4.yaml -e "host_name=testnodes tool_name=nginx tool_state=absent"
+
+ansible-playbook var4.yaml -e "host_name=testnodes tool_name=git tool_state=absent"
+
+
+
+Handling Variables in Ansible :::
+
+	- Environment variables -- accessible using Setup Module.
+	
+	- Hardcoding the values in playbook 
+		using vars :
+	
+	- Using External Variable files :
+		using var_files
+
+	- Using -e to pass the values at run time.
+
+
+
+
+Using When Condition :::
+
+---
+  - hosts: testnodes
+    #gather_facts: false
+    become: yes
+    tasks:
+      - name: Install-nginx on Debian
+        apt:
+          name: nginx
+          state: "{{pkg_state}}"
+        when: ansible_os_family == "Debian"
+      - name: Install-nginx on Redhat
+        yum:
+          name: nginx
+          state: "{{pkg_state}}"
+        when: ansible_os_family == "RedHat"
+		
+	
+
+
+		
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~ register and set-facts
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#test_var-datatype.yaml
+---
+ - hosts: samplenode1
+   gather_facts: false
+   tasks:
+   - shell: "bash --version"
+
+
+
+#test_var-datatype.yaml
+---
+ - hosts: samplenode1
+   tasks:
+   - shell: "bash --version"
+     register: bash_ver
+   - debug: var=bash_ver
+
+
+
+	  
+Handlers --> are used to control the flow of playbook execution, based on the previous modules
+		This can be done thru notify key.
+
+		Handlers are same as tasks.
+		But, it gets executed only if we notify.
+
+
+
+Handlers :::
+
+	Handlers are used to control the flow of execution of tasks.
+	
+	Tasks 1 :::
+	
+	QA_Server 
+	
+		Tomcat :::
+				
+			1. Install the Pre-requisites		# jdk 			# jdk 
+			2. Install the actual tool 			# tomcat 		# jenkins 
+			3. Configure/setup the tool			# start tomcat  # unlock jenkins and setup
+
+
+
+---
+  - hosts: samplenode1
+    #gather_facts: false
+    become: yes
+    tasks:
+      - name: Install-httpd
+        yum:
+          name: httpd
+          state: present
+	  - name: start-httpd
+        service:
+          name: httpd
+          state: started
+
+
+
+
+
+
+	apt/yum --> state : present/absent/latest 
+
+	service --> state : started/stopped/restarted
+
+
+
+
+---
+  - hosts: samplenode1
+    #gather_facts: false
+    become: yes
+    tasks:
+      - name: Install-httpd
+        apt:
+          name: httpd
+          state: present
+        notify:
+        - start-httpd
+    handlers:
+    - name: start-httpd
+      service:
+          name: httpd
+          state: started
+
+
+	
+		  
+Ansible Roles :::
+
+		Are used to organize the Ansible Components 
+		
+		for Reusability
+		
+		Use git remote repositories to maintain the Ansible Roles.
+		
+			variable/handlers/defaults/secrets/tasks
+			
+			Playbooks 
+			
+			
+		Roles can be created using :::
+		
+			- ansible-galaxy init testrole1 
+				Roles can be defined at enterprise level / global level.
+				
+			
+			
+			
+		
+Working with Handlers using Ansible Roles :::
+
+
+ansible-galaxy init testrole1
+
+---
+# tasks file for testrole1
+      - name: Install-nginx
+        apt:
+          name: nginx
+          state: present
+        notify:
+        - start-nginx
+
+
+---
+# handlers file for testrole1
+    - name: start-nginx
+      service:
+          name: nginx
+          state: started
+
+
+---
+- hosts: samplenode1
+  become: yes
+  roles:
+    - role: testrole1
+
+
+---
+- hosts: {{host_name}}
+  become: yes
+  roles:
+    - role: {{role_name}}	
+
+
+
+Loops :
+
+---
+  - hosts: samplenode1
+    become: yes
+    tasks:
+      - apt:
+         name: git
+         state: present
+      - apt:
+         name: tree
+         state: present
+      - apt:
+         name: vim
+         state: present
+
+
+Loops :::
+
+---
+  - hosts: samplenode1
+    gather_facts: false
+    become: yes
+    tasks:
+      - apt:
+         name: "{{item}}"
+         state: absent
+        loop:
+          - git
+          - tree
+          - vim
+ 
+ 
+ 
+ 
+ 
+ 
+ 			
+			
