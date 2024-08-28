@@ -145,3 +145,350 @@ Day - 5 | 27th Aug. 2024
 		Server Template 
 		
 		Ubuntu -- + + packge 
+
+
+			
+#########################
+Day - 6 | 28th Aug. 2024
+#########################		
+
+	Docker CLI Commands ::
+
+
+	
+	Docker Run Mode :::
+	
+		- Foreground/Attached Mode 			# Default 
+		
+			docker run centos 
+			
+			docker run centos sleep 20
+			
+		
+		- Background/Detached Mode 
+		
+			docker run -d centos 
+			
+		- Interactive Mode 
+		
+			docker run -it centos bash 
+			
+	docker stop <container_id>
+		
+	docker start <container_id>
+		
+	docker exec -it <container_id> bash 		# Login to the running container.
+	
+	
+	Environments
+	
+		Build 		==> Create mywebappl.war 
+		
+		QA (VM) 			==> Test mywebappl.war 
+		
+			Install Tomcat - port 8080
+			<external_ip>:8080
+			
+			Web Application Server - Tomcat/Nginx/httpd
+			
+			
+	tomcat Image :::
+	
+	Container Port Mapping/Binding :::
+	
+	
+		3 - Tier Application Service :
+		
+		Online User Login Page
+		
+			Front_End Layer (User Interface)	- C1	
+	
+			Application Layer 					- C2 
+			
+			DataBase Layer (Back_End)			- C3
+			
+			
+		docker run -it tomcat:8.0 bash 	> runs in interactive mode 
+		
+		docker run -it tomcat:8.0		> start the tomcat container 
+		
+		docker run -it -p 8089:8080 tomcat:8.0
+		
+		-p <host_port>:<container_port>
+		
+	
+	Container Volumes :::
+	
+	
+		Stateless Applications 
+			- Any application that does not leave the trace of execution.
+		
+		
+		
+		Stateful Applications
+			- Any application that leave the trace of execution, in the for or log/report.
+			- This application need input 
+			- It generate output 
+		
+	Persistant Storage :
+	
+	Docker Volume :::
+	
+		- Are used to maintain the persisant data 
+		
+		- docker volume list 
+		
+		- docker volume create tcs-vol 
+		
+		- docker volume inspect tcs-vol 
+	
+		- docker run -it --mount source=tcs-vol1,destination=/tcs-vol1 centos bash
+		
+	Container Orchestration Tool****
+	
+		docker compose/swarm
+		
+		kubernetes 
+		
+	Docker Image Creation ::::
+	
+	
+		- Docker Commit :
+		
+			- It is used to create a container image based on the existing container reference
+			
+			UseCase :
+			
+				Build Environment:
+					C1 - Install : git,jdk,maven,tomcat
+						 Test the Application
+						 Exit
+						 
+					start C1 
+					login to C1
+					Execute
+					
+					
+					Reuse the C1 in local Machine 
+					
+					Create an Image using C1
+					
+					Publish C1 to Container Registry
+					
+						
+					
+					Pull that image in any target machine & Run C1 
+					
+			Syntax :
+			
+				docker commit <existing_container_id> <Container_Repository_Name>/<new_Image>:<tag>
+				
+			Eg.: 
+			
+				docker commit 627ab2ab683 loksaieta/tcs-img1:v1.0
+		
+		
+		Publish Images to Container Registry :::
+		
+			- Login to Container Registry using docker cli 
+				- dockerhub account id 
+				- Access Token 
+					- Firstly, Create Access Token 
+						- Goto dockerhub accout setting 
+						
+				docker login -u loksaasdfasdfieta
+				
+				prompt: asdfasdfasdfsdfasdf
+				
+				
+				docker push <Image_Name> 
+				
+				docker push loksaieta/tcs-img1:v1.0
+			
+		
+		- Docker Build :
+		
+			- It is used to create a container image from the scratch based on the Dockerfile definitions	
+			
+			Syntax :
+			
+				docker build -t <Container_Repository_Name>/<new_Image>:<tag> .			# '.' is to refer the Dockerfile			
+			
+			Eg.: 
+			
+			mkdir docker-contents 
+			cd docker-contents
+			vi Dockerfile 
+			
+			FROM ubuntu 
+			RUN apt update -y 
+			RUN apt install git -y 
+			RUN apt install maven -y 
+			RUN apt install nginx -y 
+			
+				docker build -t loksaieta/tcs-bs-img1 .		
+	
+			Container Images 
+				- Is a Static File, that defines the properties of Container
+				- It is non-executable 
+				- It composed of Various Layers
+				- These Layers are created by using the Dockerfile Instructions
+			
+			
+			Dockerfile Instructions :::
+			
+				FROM		# Used to identify the base image 
+				
+				RUN 		# Used to Execute the Package
+				
+				CP 			# To Copy the Files within the Container Volume 
+				
+				COPY 		# To Copy the Files from Host Machine to Container Volume 
+				
+				ADD			# To Copy the Files from Host Machine as well as from the URL to Container Volume 
+				
+				ENV 		# To setup the Environment Variables 
+				
+				WORKDIR		# To set the Current Working Directory
+				
+				EXPOSE		# To Define the Container Port 
+				
+				CMD			# To Define the Container Start-up Command/Task 
+							  This can be modified at run-time 
+							  
+				ENTRYPOINT	# To Define the Container Start-up Command/Task
+							  This cannot modified at run-time 
+
+				
+	
+	Remove Container:
+	
+		docker rm <Container_id>
+		
+	Remove Image:
+		
+		docker rmi <Image_Name>
+		
+	Create Container with Name Tag:
+	
+		docker run --name=devps centos
+		
+	
+	Container Orchestration :::
+	
+	
+		3 - Tier Application Service :
+		
+		Online User Login Page
+		
+			Front_End Layer (User Interface)	- C1	
+	
+			Application Layer 					- C2 
+			
+			DataBase Layer (Back_End)			- C3	
+			
+			
+		Docker Compose :::
+		
+			- Is used to run multiple Containers as a Service 
+			- Docker-compose is extension/plugins to Docker Engine 
+			
+			- Write a Manifest/Config file -- *.yaml 
+				- Defines the properties/containers of the service 
+			
+			docker-compose up / down 
+			
+		Docker Swarm ::: 
+		
+			- Container Orchestration Tool 
+			- Used to create replicas of containers 
+			- Used only for the Docker Container
+			- It cannot perform Auto-scaling / load-balancing!
+			
+		
+		Kubernetes :::
+		
+			- Kubernetes is Open-Source Container Orchestration Tool 
+			- Used to create replicas of containers 
+			- Used for any type of Container
+			- It can perform Auto-scaling / load-balancing!	
+			- Self-Healing
+			- Effecive External Volume Allocations 
+			- Perform Deployments/Upgrade/Downgrade the Application Services without any Downtime!
+				- Can easily achieve Continuous Deployment
+				
+			Micro-Service Based Applications :::
+			
+	DevOps CICD Pipeline :::
+	
+		Jenkins 
+		
+		Overview Pipeline Stage :
+		
+		Developers Create the Source Code 
+		Commit the Source Changes to Source Code Repository(Github/Azure Repo)
+		
+	Jenkins :::
+	
+		CICD Pipeline ::
+		
+		Container -> 
+		
+		Sets to config jenkins on VM 
+		
+			Installation of Jenkins 
+			setup of Jenkins Plugins 
+			
+			Create CICD Pipeline 
+			
+		AWS VM :::
+		
+		Create CICD Pipeline
+
+		
+			- Composed of Various Stages :
+
+		
+		- Developers Create the Source Code 
+		- Commit the Source Changes to Source Code Repository(Github/Azure Repo)			
+			
+		Start Pipeline Execution :::
+		
+		Stages :::
+			- SCM_Checkout				# Clone the source code repo to the build server 
+			- Application Build 		# Compile source code, Unit Testing, Create Artifacts(Binaries) 
+			- Application Image Build	# Build Docker Image based on the Application Artifacts
+			- Login to Docker Registry 	# Login to Dockerhub  
+			- Push Image to Dockerhub	# Publish Image to Dockerhub
+			
+			- Deploy that Image to Target Environments
+				# Managed by Kubernetes
+				
+				Non-Prod Kubernetes Cluster :
+				
+					QA 
+				
+					UAT 				
+				
+				Prod Kubernetes Cluster :
+				
+					PROD 
+			
+			
+	How to Implement this ::		4 VMs 
+	
+	VMs on AWS / Azure / GCP 
+	
+		- Jenkins_Master (VM)
+			- Perform Build, Create Artifacts, create Image, publish to dockerhub
+				- SCM_Checkout				# Clone the source code repo to the build server 
+				- Application Build 		# Compile source code, Unit Testing, Create Artifacts(Binaries) 
+				- Application Image Build	# Build Docker Image based on the Application Artifacts
+				- Login to Docker Registry 	# Login to Dockerhub  
+				- Push Image to Dockerhub	# Publish Image to Dockerhub
+			
+		- Kubernetes_Master (VM)
+			- Worknode1,2
+			
+Next ::
+	Jenkins  & Kubernetes
