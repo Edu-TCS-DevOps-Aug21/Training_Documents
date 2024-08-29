@@ -492,3 +492,156 @@ Day - 6 | 28th Aug. 2024
 			
 Next ::
 	Jenkins  & Kubernetes
+
+
+#########################
+Day - 7 | 29th Aug. 2024
+#########################	
+
+	CI Pipeline using Jenkins & Docker!
+	
+		Stages :::
+			- SCM_Checkout				# Clone the source code repo to the build server 
+			- Application Build 		# Compile source code, Unit Testing, Create Artifacts(Binaries) 
+			- Application Image Build	# Build Docker Image based on the Application Artifacts
+			- Login to Docker Registry 	# Login to Dockerhub  
+			- Push Image to Dockerhub	# Publish Image to Dockerhub
+		
+		Install Jenkins 
+			- Install the Required Plugins 
+			- Create CICD Pipeline 
+			
+			
+		Launch a VM 
+			- Install Jenkins as a service			# Default Port: 8080
+			
+					https://www.jenkins.io/doc/book/installing/
+
+		Create CICD Pipeline :::
+		
+		
+		Stages :::
+			- SCM_Checkout				# Clone the source code repo to the build server 
+			- Application Build 		# Compile source code, Unit Testing, Create Artifacts(Binaries) 
+			- Application Image Build	# Build Docker Image based on the Application Artifacts
+			- Login to Docker Registry 	# Login to Dockerhub  
+			- Push Image to Dockerhub	# Publish Image to Dockerhub	
+			
+		Tools to Build the Application :::
+			Install these tools in the build server(Jenkins_Master_Node) :
+				- git
+				- jdk 
+				- maven 
+		
+		Java Maven Web Application
+		
+			Maven - Build 
+			
+				POM.xml File 
+					# Define the properties of Application Build, all the dependencies and plugins to perform build
+					
+				Maven Goal ::
+					Compile 	- Just to compile the source code 
+					Test		- Compile and Perform unit testing 
+					Package		- Compile, Unit Test, Create Artifacts in the target/ folder 
+					clean 		- Clean-up the target folder 
+					
+				Eg.: mvn clean package 
+			
+		Create Pipeline Script:::
+		
+			- Scripted Pipelines 
+			
+			- Declarative Pipelines 		# Simplified version of Scripted Pipeline			
+				 							# Easy to write and manage
+											
+pipeline {
+    agent { label 'slave1' }
+
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM_Checkout'
+				git 'https://github.com/Edu-DCP-May20/devops-java-webapp.git'
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo 'Perform Application Build'
+				sh 'mvn clean package '				
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                echo 'Perform Docker Build'
+            }
+        }
+        stage('Login to Docker Registry') {
+            steps {
+                echo 'Login to Docker Registry'
+            }
+        }
+        stage('Push Appln_Img to Docker Registry') {
+            steps {
+                echo 'Publish image to Docker Registry'
+            }
+        }
+    }
+}
+				
+				
+				
+	Jenkins_Master Slave :
+	
+		-- Jenkins Master Node 		==> Create Jenkins Jobs & Schedule to run in slave nodes 
+			--	Slave_Node1 (Build Server)	===> Actual Build Happens  - Java Build 
+			--	Slave_Node2 (Build Server)	===> Actual Build Happens  - .Net Build 
+			--	Slave_Node3 (Build Server)	===> Actual Build Happens  - Python Build 
+			--	Slave_Node4 (Build Server)	===> Actual Build Happens  - Angular/NodeJS Build 	
+
+
+
+
+pipeline {
+
+    agent { label 'slave1' }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	}
+	
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+				git 'https://github.com/Edu-TCS-DevOps-Aug21/java-mvn-springbootapp.git'
+            }
+        }
+        stage('Application_Build') {
+            steps {
+                echo 'Perform Maven Build'
+				sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+            }
+        }
+
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Publish_to_Docker_Registry') {
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+    }
+}
