@@ -1,0 +1,121 @@
+
+
+
+#########################
+Day - 7 | 29th Aug. 2024
+#########################
+		
+	Kubernetes :::
+	
+		- Kubernetes is Open-Source Container Orchestration Tool 
+		- Used to create replicas of containers 
+		- Used for any type of Container
+		- It can perform Auto-scaling / load-balancing!	
+		- Self-Healing
+		- Effecive External Volume Allocations 
+		- Perform Deployments/Upgrade/Downgrade the Application Services without any Downtime!
+			- Can easily achieve Continuous Deployment
+			
+		Micro-Service Based Applications :::
+		
+	
+	Kubernetes Architecture
+	
+	Kubernetes Components
+	
+	Kubernetes Concepts
+	
+		- Kubernetes Cluster
+		- Pods 
+		- Controller Objects
+			- Replication Controller 
+			- Replicaset 
+			- Daemenset
+			- Deployment
+		- Services 
+			- NodePort Service 
+			- ClusterIP 
+			- Load Balancer 
+		- Volumes 
+		
+		
+	Open-Source Kubernetes 
+	
+	
+	Managed Services 
+	
+		AWS - ECS/ECR/EKS
+		
+		AZURE - ACS/ACR/AKS 
+		
+		GCP - GCE/GCR/GKE
+		
+		
+	Kubernetes Architecture :::
+	
+	Kubernetes Components	
+	
+		API Server 
+		ETCD 
+		Scheduler
+		Controller Object 
+		
+		Kubelet 
+		KubeProxy
+		CRI - Container-D 
+	
+	
+	Non-Prod 												Prod 
+	
+																Production Servers 
+																
+																
+	Kubernetes_Master (Control-Plane)
+		Kubernetes_WorkerNode1
+		Kubernetes_WorkerNode2
+		Kubernetes_WorkerNode3
+		
+
+	Kubernetes Concepts/Terminologies :::
+	
+		kubectl 				# Command Line Utility to interact with Kubernetes Master 
+		
+		Kubernetes_Cluser		# Collection of WorkerNodes 		
+		
+		Pods					# Atomic Unit of Schedule 
+		
+		
+	Working with Kubernetes ::::
+	
+	
+	Install and Configure Kubernetes Cluster 
+	
+		Kubernetes_Master (Control-Plane)
+			Kubernetes_WorkerNode1
+			Kubernetes_WorkerNode2	
+			
+			
+	kubeadm - Is command Line Utility used to config and setup the Kubernetes Master & Attache WorkNodes 
+	
+	
+		1. Launch 3 VMs 
+		2. Enable the required ports - using security group 
+		3. setup host name 
+		4. Packages/Commands to be executed on all Master & Worker Nodes
+			- install docker 
+			- cri 
+			- kubeadm
+			- kubelet
+			- kubectl 
+			- enable kubelet 
+			
+		5. Packages/Commands to be executed only on Master/control plane
+			- kubeadm init 
+			- setup access to kubectl 
+			- Install Network Plugins used by Kube-proxy to enable pod networking 
+			- verify the nodes/pods ....
+			
+		6. Commands to be executed only on WorkerNodes
+			- kubeadm join 
+			
+		Kubernetes Dashboard
