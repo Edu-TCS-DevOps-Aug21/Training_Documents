@@ -119,3 +119,158 @@ Day - 7 | 29th Aug. 2024
 			- kubeadm join 
 			
 		Kubernetes Dashboard
+
+
+
+
+#########################
+Day - 8 | 2nd Sep. 2024
+#########################
+		
+	Kubernetes Concepts
+	
+		- Kubernetes Cluster		--> Is a collection of Worker Nodes!
+		- Pods 
+		- Controller Objects
+			- Replication Controller 
+			- Replicaset 
+			- Daemenset
+			- Deployment
+		- Services 
+			- NodePort Service 
+			- ClusterIP 
+			- Load Balancer 
+		- Volumes 
+			- Hostpath Volume
+			- Persistant Volume
+			- Persistant Volume Claim
+			
+			
+	Case Study :
+	
+		Jenkin - GIT/Docker/Kubernetes
+
+	AWS DevOps Services
+	
+	Azure DevOps Services
+	
+	
+	How to Expose pods ?
+	
+		Services 
+		
+			- NodePort Service 
+				- Is used to expose the pods to internet 
+				- Node Port Range : 30000 to 32767 
+				
+				
+	- Controller Objects
+		- Replication Controller 
+		- Replicaset 
+		- Daemenset
+		- Deployment
+
+			Replicas of Pod 
+			
+			Launch a website :
+			
+				1000 Users can access at the same time 
+				
+				100 Instance of Pods 
+				
+				
+				5000
+				
+				Scale-Up 
+				
+				Scale-Down 
+				
+
+		- Daemenset
+
+				
+		- Deployment :::
+
+			Is used to Deploy the containerised workloads in kubernetes
+			It can perform, New deployments,
+			Existing Application Upgrade / Downgrade 
+			Rollback 
+			Scale-up/Scale-down
+			
+			It Create Deploy Object 
+			It will automatically creates the Replicaset 
+			Based on Replicaset, Pod replicas will be created
+			
+			All these things can be achieved without any downtime. 
+			
+
+			- Uses the RollingUpdate Deployment Strategy :	
+			
+			
+			Deployed Pods :
+			
+			3 Instances of Pods ::
+			
+				pod1	--> v1.0 
+				pod2 	--> v1.0
+				pod3	--> v1.0
+				
+			Upgrade the app to v2.0 ::
+			
+				pod1	--> v1.0 	==> 	v2.0	
+
+	- Services 
+		- NodePort Service
+		
+		- ClusterIP 
+		- Load Balancer 
+		
+			Routing Rules ::  IGRESS Rules 		-==> It is actually used to reduce the load balancer service 
+			
+				- Simple Routing 
+				
+				- Path Based Routing 
+				
+				- Host Based Routing 
+		
+
+		Path Based Routing  :::		
+		
+							Inbox						sent 							trash 
+		www.gmail.com 	--> www.gmail.com/inbox			www.gmail.com/sent				www.gmail.com/trash
+		
+		
+
+		Host Based Routing 
+				
+		www.google.com :::
+			
+		www.gmail.google.com 
+						Path Based Routing  :::		
+		
+							Inbox						sent 							trash 
+		www.gmail.com 	--> www.gmail.com/inbox			www.gmail.com/sent				www.gmail.com/trash
+
+		www.drive.google.com 
+		www.translate.google.com 
+		www.gcloud.google.com 
+		
+		
+	- Volumes ::::
+		
+		--> Volumes are used to maintain the state of application services 
+		--> It is used to maintain the persisant data throughout the execution of Application Service and beyond the execution
+		
+		Pod --> 500GB of Volume ??
+		
+		Storage Servers 
+		
+		
+		deployed a pod in workerNode1 -- hostpath volume will be created 
+		
+Next :::		
+		ConfigMap Volume 
+		Secret Volume 
+		Namespaces 
+		
+		Integrate Kubernetes Pods Deployment with CICD Pipeline 
