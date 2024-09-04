@@ -274,3 +274,264 @@ Next :::
 		Namespaces 
 		
 		Integrate Kubernetes Pods Deployment with CICD Pipeline 
+
+#########################
+Day - 9 | 3rd Sep. 2024
+#########################
+
+	Namespaces 
+	
+	CICD Pipeline using Jenkins,Docker,Kubernetes 
+	
+	Introduction to Azure DevOps Service 
+	
+
+
+	Kubernetes Namespaces 
+			--> These are the logical partitioning of the Kubernetes Cluster 
+			
+	default
+	kubesystem
+	kube-flannel 
+	
+	Non-Prod 
+		DEV/QA/UAT
+	
+	
+	Non-Prod 																		Prod 
+	                                                                                
+	Kubernetes_Master                                                               Kubernetes_Master
+		Kubernetes_WorkerNode1                                                      	Kubernetes_WorkerNode1
+		Kubernetes_WorkerNode2                                                      	Kubernetes_WorkerNode2
+		Kubernetes_WorkerNode3                                                      	Kubernetes_WorkerNode3
+		
+		
+	Namespace 1 : DEV 
+	Namespace 2 : QA1,QA2 
+	Namespace 3 : UAT  
+	
+	
+	Prod :::
+	
+		Rolling Update Strategies :::
+		
+		Blue-Green Deployments strategies :::
+		
+		Major Releases !
+		
+		Prod :::
+		
+			(Blue)Prod_Servers(Active_Servers-5servers)		---> LIVE Application   ---> webapp_V1.0 /v1.1 /v1.2 - Shut-down 
+								
+			
+			webapp_v2.0
+			
+			(Green)Prod_Servers(Passive_Servers-5servers)		---> Deploy new version ---> webapp_v2.0 --> ACTIVE 
+			
+			Once Passive_Servers responds as expected with webapp_v2.0
+		
+
+		Blue Green Deployment using Kubernetes :::
+		
+			
+		Prod 			LIVE Prod Environment - webapp_V1.0
+		
+		Namespace-Active_v1.0		Drop this NameSpace upon testing Active_v2 
+
+		Kubernetes_Master
+			Kubernetes_WorkerNode1
+			Kubernetes_WorkerNode2
+			Kubernetes_WorkerNode3
+			
+		Namespace-Active_v2.0 - webapp_V1.0
+		
+	
+	Volumes :
+		ConfigMap 		
+		Secret 
+		
+		
+	Package Manager for Kubernetes Cluster :::
+	
+		HELM is Package Manager for Kubernetes
+		
+		GUI Based Kubernetes Dashboards can be used to Manage the Kubernetes
+	
+	Install Helm package manager :
+	
+		https://github.com/helm/helm/releases
+	
+	
+	
+	
+	Application Deployment to Kubernetes Cluster using CICD Pipeline 
+		
+	
+	1. Source Code Repository 
+	
+	
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loksai-eta-deploy
+  labels:
+    app: loksai-eta-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: loksai-eta-app
+  template:
+    metadata:
+      labels:
+        app: loksai-eta-app
+    spec:
+      containers:
+      - name: loksai-eta-container
+        image: loksaieta/loksai-eta-app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loksai-eta-np-service
+  labels:
+    app: loksai-eta-app
+spec:
+  selector:
+    app: loksai-eta-app
+
+  type: NodePort
+  ports:
+  - nodePort: 31028
+    port: 8080
+    targetPort: 8080
+
+pipeline {
+
+    agent { label 'pwcslave1' }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	}
+	
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+				git 'https://github.com/Edu-TCS-DevOps-Aug21/java-mvn-springbootapp.git'
+            }
+        }
+        stage('Application_Build') {
+            steps {
+                echo 'Perform Maven Build'
+				sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+            }
+        }
+
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Publish_to_Docker_Registry') {
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+		stage('Deploy to QA-Kubernetes') {
+            steps {
+				script {
+				sshPublisher(publishers: [sshPublisherDesc(configName: 'PoW-Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f k8sdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+			}	
+            }
+		}
+		stage('Automated QA Testing') {
+            steps {
+				script {
+				
+				success = 'yes'
+
+			}	
+            }
+		}
+		stage('Deploy to Prod-Kubernetes') {
+			when-expression(success == 'yes'){
+            steps {
+				script {
+				sshPublisher(publishers: [sshPublisherDesc(configName: 'Kubernetes_Master', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f k8sdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+			}	
+            }
+		}
+		}
+    }
+}	
+		
+
+	
+	Infra-Structure ::
+	
+
+	 	Jenkins Master Node 		==> Create Jenkins Jobs & Schedule to run in slave nodes 
+			Slave_Node1 (Build Server)	===> Actual Build Happens  - Java Build & Docker Build
+		Kubernetes_Master
+			Kubernetes_WorkerNode1
+			Kubernetes_WorkerNode2	
+		
+	Publish over ssh plugins! 
+		
+		kubectl apply -f k8sdeploy.yaml			# To Create and replace 
+		
+		kubectl create -f k8sdeploy.yaml		# To Create New Object 
+	
+
+
+	Build Periodic :
+		- This will trigger the jenkins job based on the crontab schedule.
+		- Used for any process automation
+		
+		Eg.: 	Periodic Back-up of workspace/artifacts
+				Periodic Clean-up of Workspace directories 
+	
+	Github Webhook 
+		- This is to perform continuous Deployment 
+		- For every commit in remote repository, the CICD pipeline gets triggered 
+		
+	Poll SCM 		
+		- This will trigger the jenkins job based on the crontab schedule only if there is any changes committed in the source code repository 
+		
+		Test Cycle ::
+		
+		8AM - 12PM - 3PM  ==> QA Testing 
+		
+	
+	Introduction to Azure DevOps Service :::
+
+		
+
+		- Azure Boards 		--> This is based on the AGILE Methodologies - To create User Stories, 
+							Is a ALM Tool 
+							
+		- Azure Repos 		==> can be compared with github repositories
+		
+		- Azure Pipelines 	*.yaml Scripting 
+		
+			- Build Pipeline 
+			- Release Pipeline 
+		
+		- Azure Artifacts
+		
+		- Azure Test 
+		
+		- Infra-Structure Creation - Azure Resource Manager 
+	
