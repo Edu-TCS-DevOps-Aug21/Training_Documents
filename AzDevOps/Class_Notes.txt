@@ -1,0 +1,365 @@
+		
+#########################
+Day - 10 | 4th Sep. 2024
+#########################
+		
+	Introduction to Azure DevOps Services!
+	
+	Az Cloud 
+	
+	Gain access to Azure Cloud 
+	
+	
+	Application Build and Deployments :::
+	
+	Resources :
+	
+		Dev/Build/Test/PROD Environments - Virtual Machines 
+		
+	Tools :
+		SCM Tools 
+		Build Tools 
+		Container Services 
+		Kubernetes Services 
+		
+	Automation of Builds & deployments
+	
+		Azure DevOps Services :
+		
+		Az Repo
+		Az Pipeline 
+		
+	Azure Clould ::
+	
+	
+		scm_checkout --> build --> Create ARtifacts --> save ARtifacts in the Artifactory Library --> Create Container - Deploy 
+	
+			https://portal.azure.com/signin/index/			
+			
+			https://aex.dev.azure.com/
+			
+			
+			
+		Azure DevOps Services ::
+		
+			Organization 
+				- Projects 
+					- Repos/Pipeline/Artifacts/Test Plans 
+					
+		Types of Projects: 
+		
+		Basic Project Process:
+		
+			EPIC	
+				issue1
+					task1
+					task2
+				issue2
+					task 
+					
+		Agile Project Process:
+		
+			EPIC 
+				Feature - Q1
+					UserStory1	
+						task1
+						task2
+						bug2						
+					UserStory2
+				Feature - Q2
+					UserStory1 
+					UserStory2		
+
+
+
+			Client1 :::
+			
+				DevOps Services 						
+				
+				EPIC - DevOps Services
+				
+					User_Story1 - DevOps Strategies Planing
+						Task1 - Interact with all Teams 
+						Task2 - Analyse their current build and deployment process 
+						Task3 - Prepare Recommendation Documentations 
+						Task4 - Present it with the client 
+						Task5 - Finalise the DevOps Strategies
+						
+				
+				
+				
+				
+				Monitoring Services 
+				
+				Testing Services 
+				
+				Infra-Structure Management Service 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					
+
+
+			EPIC --> Cloud Adoption 
+			
+				- Feature1 - Legacy Modernization 
+					- UserStory1 - Analyse the dependencies
+						- Task1 - Pgm Components 
+						- Task2 - Shared Library 
+				
+				- Feature2 - DevOps 
+				
+				- Feature3 - DB_Migration 
+
+
+		EPIC : DevOps Implementation																	# Epic(Parent to User Stories)	
+
+				1. Detailed DevOps Assessment 															# User Stories(Child to Epic)
+				
+				2. Onboard the Applications 
+					
+					- Create Project Repo and CICD Pipeline to Build and Deploy Java Web Application 	
+					
+				3. Periodic Enhancement/Upgrade of DevOps Process and Pipeline Scripts
+
+					- Implement the Containerization using Docker & Kubernetes
+
+				4. Automate Infra-Structure Provisioning 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		SCRUM Project Process:
+		
+			EPIC 
+				Feature - Q1
+					Product Backlog Item1	
+						task1
+						task2
+						bug2						
+					Product Backlog Item2
+				Feature - Q2
+					Product Backlog Item1
+					Product Backlog Item2				
+										
+										
+#########################
+Day - 11 | 5th Sep. 2024
+#########################
+
+	Working with Azure Repos and Azure Pipelines ::::
+	
+	Create Az Repos ::
+	
+	Import github Repo to Azure Repo.
+	
+	Local Machine ::
+	
+		- Eclipse based IDE
+		
+		- Pycharm IDE 
+		
+		- Visual Studio Code IDE 
+		
+		- Visual Studio IDE 
+		
+		
+		
+		Visual Studio Code / Visual Studio IDE ::			https://code.visualstudio.com/download
+			Connect to remote git repos(Azure Repo/Github)
+			
+	Azure DevOps Parallelism Request ::: 
+	https://forms.office.com/pages/responsepage.aspx?id=v4j5cvGGr0GRqy180BHbR5zsR558741CrNi6q8iTpANURUhKMVA3WE4wMFhHRExTVlpET1BEMlZSTCQlQCN0PWcu&route=shorturl
+	
+	
+	IAC Tool ==> Infra-Structure As Code !
+	
+	azurerm
+	
+	
+	Pipeline :
+	
+	Agent :
+	
+	Stage1 :
+		step1
+		step2
+		
+	Stage2 :
+		Agent :
+		step2 
+		step2 
+		
+		
+	Application Build 
+	
+		for Build 	-- we use Agents (Microsoft Hosted Agent/Self Hosted Agent)
+		
+		Deployment 	-- 	Target Server (VM - Web Application Server)
+						Container - Build Container Image - Published to Azure Container Registry - Deployed to Azure Kubernetes Cluster 
+
+
+#########################
+Day - 12 | 6th Sep. 2024
+#########################
+
+	Azure Pipeline Service :::
+	
+		Create a CICD Pipeline:
+			
+			CI & CD ::
+
+			Build Pipeline 
+			
+			Release Pipeline!
+			
+			Build Environment (Agent)
+			
+			
+			
+			- Hosted Agent 	(Build Server)									# Build Pipeline 
+					Able to build a java web application!
+					Create Artifacts 
+					Archieved the Artifacts in Pipeline 
+					
+					Docker Build 
+					Publish the Docker Image to ACR 
+			
+			
+			- Self Hosted Agent 
+			
+				- Launch a VM :
+				
+				- Install the Build Tools :
+				
+					- MavenAppBuildServer --> 		# To Perform Maven Application Build 
+						
+						- git 			# sudo apt install git -y 
+						- jdk 			# sudo apt install openjdk-11-jre -y
+						- maven 		# sudo apt install maven -y 
+					
+				- Attach this Build Server as Agent to run the Pipeline	
+				
+					- Goto AzDevOps Organization 
+						Goto Project Setting!
+							- Create a Agent Pool
+							
+								- Add Agent 
+									- URL Organization URL						# https://dev.azure.com/LoksaiTrainingOrg
+									- Create Personal Access Token (PAT) 		# vqa2ua
+											- goto user setting and create PAT 
+									
+  name: webservpool1
+  demands:
+   - agent.name -equals javaappbs1 								
+
+		Containerization :::
+			
+			On Self Hosted Agent ::
+			
+				sudo apt install docker.io -y 
+				
+			Docker Build 
+			Publish the Docker Image to ACR 		
+
+
+			Create Container Registry :::
+				Goto :
+				
+				https://portal.azure.com/
+
+					Create Container Registry
+
+
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  name: webservpool1
+  demands:
+   - agent.name -equals javaappbs1 
+
+  #vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: 'default'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'tcscr1'
+    repository: 'crepo1'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+
+
+
+
+
+
+
+
+
+
+
+
+						
+						
+	To work with ACR / AKS / App Web Server :::
+	
+	https://portal.azure.com/
+	
+	https://dev.azure.com/LoksaiTrainingOrg/
+
+	
+	
+	Kubernetes :: 
+		- Azure Kubernetes Service :::
+		
+		- Deploy the Containerized Applications :::
+		
+		- Deployment :::
+		
+			Types of Deployments ::::
