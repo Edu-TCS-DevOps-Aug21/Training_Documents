@@ -363,3 +363,625 @@ steps:
 		- Deployment :::
 		
 			Types of Deployments ::::
+
+
+
+#########################
+Day - 13 | 9th Sep. 2024
+#########################
+	
+	
+	
+	Release Pipelines :
+	
+		Deployment Process!
+		
+		Pre-requisities ::::
+		
+		
+		Deploy ?
+		
+			Build Environment *.war 		====> Artifactory Library 		====> 		Target Environment 
+													*.war_SNAPSHOT_V1.0						
+													*.war_SNAPSHOT_V1.1						
+													*.war_SNAPSHOT_V1.2						*.war_SNAPSHOT_V1.2			
+			
+	1. Artifacts 
+	
+	Deployment Workflow ::::
+	
+	DEV Envi.				Azure Repo
+	VS_Code 		===>	Scr_Code Repo	===>	Build Environment *.war 	====> Artifactory Library 	====> Containerize  		Target Environments 
+	Create src code 		*.java_v1.0												*.war_SNAPSHOT_V1.0				appimg:v1.0   			
+							*.java_v1.1												*.war_SNAPSHOT_V1.1				appimg:v1.1	
+							*.java_v1.2												*.war_SNAPSHOT_V1.2				appimg:v1.2				*.war_SNAPSHOT_V1.2	
+							
+							Scan the src_code											Scan the Artifacts			Scan App Images
+							
+							
+	*.exec Files downloaded thru internet !
+	
+	
+		*.exec ==> How to ensure that this package is secured and free from all vulnerabilities...
+		
+		WhiteSource ==> Open-Source Security and compliances Management Tool
+		
+		
+		vulnerabilities Scan:
+		
+		
+		
+		
+		Scripting Language :
+		
+		Validation / process automation 
+		
+			www.google.com
+			www.amazon.com
+			
+			Service1 
+		
+			User_Registration 
+			
+			
+			3-tier App Architecture :::
+			
+			Front_End
+			
+			App_Layer 
+			
+				- receive the inputs 
+				- validate the inputs
+					- User_Name Validation	==> 
+					- E_Mail Validation 	==> id@adf.com / duplication 			--> Email_validation_package & maintain in the artifact libraries
+					- Password Validation	==> it is based on security policy
+					
+				- Query DBase 
+			
+			DBase_Layer
+			
+		import email_validation.*;
+		
+		
+		
+		2. Target Infra-Structure ::
+		
+					Infra-Structure Management using IAC Tools 
+					
+						- Terraform/Az Resource Manager 
+					
+					
+				In Azure :::
+				
+					Continuous Integration - Target Environments:
+					
+					DEV 
+					
+					BUILD 
+					
+						*.exec / *.war 
+						
+						Container_Image 
+					
+					Target Environments 		# Can be created dynamically / build-server! 
+					
+					
+						QA 
+						
+						UAT 
+						
+						PROD 
+							
+							- App_Servers!
+							
+							- Dynamically Create the Target Server!
+							
+							
+							
+					Build Cycle / Test Cycle / Release Cycle ::
+					
+					Planned Build / Release ::
+					
+						Upfront will have all the servers/tools configured 
+						
+						
+						Test Servers 
+						
+						
+					Adhoc Request - Prod - Bug Fixing 
+					
+						Test & Promote adhoc changes 
+						
+						
+						Dynamic Server Provisioning & Configurations
+						
+						
+			
+			Pipelines :: Adhoc Requirement ::
+			
+				1. SCM_Checkout
+				
+				2. Build 
+				
+				3. Deploy to Test_Envi 
+				
+				4. Perform Testing 
+				
+				5. Release to Prod 
+							
+			
+			Pipelines :: Adhoc Requirement ::
+			
+				1. SCM_Checkout
+				
+				2. Build 
+				
+				3. Create Test Server 	( IAC Tools - Terraform/AzRM/Cloudformation)
+				
+				4. Configure Test Server (Ansible)
+				
+				5. Deploy to Test_Envi 
+				
+				6. Perform Testing 
+				
+				7. Release to Prod 	
+				
+				8. Destroy the Test Servers 
+
+
+
+
+Pipeline 1 : SCM_Checkout 	--->	Create New_Test_Server 	---> 	Config New_Test_Server
+
+Pipeline 2 : SCM_Checkout 	---> 	App_Build	---> Deploy to New_Test_Server 	--> Automated Testing
+
+				
+				
+Scenario 1:
+
+	Regular Build & Deployments :
+	
+	Pipeline ::
+	
+	
+	SCM_Checkout 	---> 	App_Build	--->	Create New_Test_Server 	---> Config New_Test_Server 	---> Deploy to New_Test_Server 	--> Automated Testing
+		|																																			|
+		|																																			|
+		|																																	Share the feedback
+	Receive the feedback																															|
+		|																																			|
+		<---------------------------------------------------------------------------------------------------------------------------------------------																																			
+
+Scenario 2:
+
+	SCM_Checkout 	---> 	App_Build	--->	Create New_Test_Server(Local/AWS/Azure) 	---> Config New_Test_Server(Local/AWS/Azure) 	
+	
+					---> Deploy to New_Test_Servers 	--> Automated Testing --> Create Test Report --> Destroy the New_Test_Server --> Send Feedback
+					
+
+
+	Terraform		(vs)		ARM(Azure) 		(vs)	Cloudformation(AWS)
+
+
+	Multi-Cloud / Hybrid Model :::
+	
+	
+	
+	DevOps ::
+	
+		Infra-Structure Provisioning/Configurations
+	
+	Source Code Repository :	
+	
+		CICD Pipeline 
+		
+	
+	GitOps ::
+	
+		Source Code Repository :
+		
+			Terraform Scripts 
+			Ansible Playbooks
+			SRC Code 
+			
+			Pipeline :: 
+			
+	SCM_Checkout 	---> 	App_Build	--->	Create New_Test_Server(Local/AWS/Azure) 	---> Config New_Test_Server(Local/AWS/Azure) 	
+	
+					---> Deploy to New_Test_Servers 	--> Automated Testing --> Create Test Report --> Destroy the New_Test_Server --> Send Feedback
+
+
+	Terraform ::
+	
+		- Terraform Architecture
+		
+		- Terraform Working Model 
+		
+		- Write Terraform Scripts 
+		
+		
+	IAC Tools ::
+	
+		Provisioning/Creating the Resource 
+			- Is a process of creating the resource 
+			
+			- Terraform/AzRM/Cloudformation
+		
+		
+		Configuration Management 
+			- Process of config'
+			
+			- Ansible/Chef/Puppet
+			
+		
+		- Terraform Working Model 
+		
+			- Identify the Scope(Target Platform) - AWS/Az/GCP/VM
+			
+			- Write Terraform Script - Define the resources 			*.tf 
+			
+			- Perform Terraform Init - To Initialize the Terraform Provider to the terraform project 
+			
+			- Perform Terraform Plan - To Preview the Terraform Script
+			
+			- Perform Terraform Apply - To Apply the Actual Changes on the Remote Environment
+			
+			
+		Terraform Registry :: https://registry.terraform.io/?product_intent=terraform
+		
+		
+		
+
+#########################
+Day - 14 | 10th Sep. 2024
+#########################
+
+	Continuous Improvement..!!!!!
+	
+	
+	Deployments!!!
+	
+		How to ensure high availability of Production Environments & Applications ????
+		
+		Continuous Monitoring
+
+		Feedback Process!
+	
+	
+		Business Continuity!
+		
+		DevOps Team!
+		
+		24 - 36 Months!
+		
+		What Next ?
+		
+		DevOps --> DevSecOps --> gitOps --> AIOps 
+		
+		
+		Azure DevOps Services! 
+		
+		
+		Continuous Monitoring  ==> 24/7 
+
+		Feedback Process!		
+		
+		
+		CICD Pipeline Templates & On-Board the Application!
+		
+		Continuous Monitoring :::
+		
+			- Infra-Structure Monitoring
+			
+				Web Application Server :	
+					
+					CPU Utilization has reached 100%
+					
+					Memory Utilization - 100%
+					
+					- WebAppln.
+					
+					
+				Azure Monitor ===> 	To prevent the issues!
+				
+					Threshold Limit for CPU Utilization --> 75% 
+					
+						- Sent Immediate Notification to the Stakeholders 
+						
+						- Get into the server and kill some process that is holding the resource for longer time
+
+						- Add More CPUs 
+						
+					Threshold Limit for Memory Utilization --> 75% 						
+					
+						- Sent Immediate Notification to the Stakeholders 
+						
+						- Get into the server and clear the volume that is holding the resource for longer time 	
+						
+						- Add More Volumes 
+
+
+					Auto-scaling Group!
+						
+						
+						
+			- Shift Left Approach :::			
+						
+				- --> Proactively identify all the possible issues at the very earlier stage and fix it.
+				
+				Dev --> unit level testing!		50 ut scenarios 
+						Ensure Code Quality
+				
+				
+				
+				QA	--> QA Testing - f/r/s/p ===?  100 Scenarios 
+				
+				UAT --> 
+				
+				PROD --> 
+				
+				
+				dev ---> qa -- Test Scenarios / Test Data 
+				
+				
+				---> uat ---> prod 
+				
+				
+				UAT --> User Acceptance Testing!
+				
+				Business Users!
+				
+				Domains 
+				
+				Telecomm Domain!
+				
+					SP1 --> New feature/service to their customer!
+								This service will be available only form their authorized Outlets 
+								
+								Business User! collect the customer data 
+								
+								Release to LIVE Envi.
+				
+		
+
+
+#########################
+Day - 15 | 11th Sep. 2024
+#########################				
+				
+			
+		Azure Security & Compliances
+		
+		
+		Shift-Left Approach ::
+		
+		
+		SonarQube Analyzer !
+		
+			- Static Code Analyzer
+			
+			
+		
+			- Used to Ensure Code Quality/Coding Standards
+				- Based on the Programming Language
+				- Based on Company's Coding Standard policies
+				
+			- Identify any vulnerabilities/bugs on source code 
+			
+			- SonarQube Analysis can be done on the incremental Changes!
+				- Actual Code Scan happens in the Feature Branch 
+			
+		Program - *.java - 2000 Lines of Code - 5yrs old 
+		
+		New Change to be done on this program. -- just 10 lines of code.
+		
+		when we submit this for sonarqube analyzer ?
+		
+		Baseline!
+		
+		Sonarqube Analysis works based on the Branching!
+		
+		
+		master 					--> Code Base 2000
+		
+			feature1(Rel_No/CR_No)		- 	New Change to be done on this program. -- just 10 lines of code.
+			feature2					- 	New Change to be done on this program. -- just 20 lines of code.
+		
+		Before developer make any changes, DevOps Team will base line the already existing source code to sonarqube server in the master branch 
+			
+			
+		github - repo.
+		
+		SonarQube Project:
+			- AppPaymentModule-Project1
+					- master -- to baseline the code 
+					
+						feature1 - New Change to be done on this program. -- just 15 lines of code.
+			
+		Source Code :::
+		
+		Java_Project_Folder 					
+			- SRC 
+				main
+					*.java
+				test 
+					*.java 
+			- TARGET 
+				*.war 
+			application.properties
+			db_user_name
+			db_password 
+			db_secret 
+			db_credential
+		
+		
+		
+		DevOps Process :::
+		
+		SCM_Checkout  --> Application_Build --> Unit Testing --> 	Code Quality Check											--> 	Test  --> Deploy to Prod.
+		*.java 														(SonarQube Analyzer )														   Merge the featurel to master 
+																	Scan the entire source code based on policies & rules)							On Sonarqube server
+																	SonarQube Analysis Report
+																	Verify the Code Coverage 
+																	Verify the Unit Test Coverage 
+																	Verify it with the Quality Gating
+																	Once the Quality gate is success, we all code promotion.
+			
+				
+				
+				
+					
+		Sonarlint is an extention, to be installed in IDEs 	
+			Sonarlint will be integrated with the SonarQube Server 
+			
+			
+			
+		Static Code Analyzer 
+			- Lower Environment 
+			
+			
+		Dynamic Code Analyzer 
+			- Production Environment based on real time data  
+			
+						
+			
+		Public Key & Private Key!
+		
+		Key Pair - 
+		
+		SSH Conn 
+		*.pem to local machine!
+		
+		
+		Controller Machine!	--> 
+			If we store the keys on the machine it is static 
+			
+			dir/....
+		
+			VM1,2,3,4,5,6,7,8
+			
+			Dynamic Key Management!			*** Most secured way to access the remote server!
+			
+			dir/
+			
+
+Terraform :::
+	
+	Terraform ::
+	
+		- Terraform Architecture
+		
+		- Terraform Working Model 
+		
+		- Write Terraform Scripts 
+		
+		
+	IAC Tools ::
+	
+		Provisioning/Creating the Resource 
+			- Is a process of creating the resource 
+			
+			- Terraform/AzRM/Cloudformation
+		
+		
+		Configuration Management 
+			- Process of config'
+			
+			- Ansible/Chef/Puppet
+			
+		
+		- Terraform Working Model 
+		
+			- Identify the Scope(Target Platform) - AWS/Az/GCP/VM
+			
+			- Write Terraform Script - Define the resources 			*.tf 
+			
+			- Perform Terraform Init - To Initialize the Terraform Provider to the terraform project 
+			
+			- Perform Terraform Plan - To Preview the Terraform Script
+			
+			- Perform Terraform Apply - To Apply the Actual Changes on the Remote Environment
+			
+			
+		Terraform Registry :: https://registry.terraform.io/?product_intent=terraform
+		
+		Using Terraform :::
+		
+		- Create/Add Resource 		+
+		
+		- Modify/Change Resource	~ 	
+		
+		- Delete/Destroy Resource 	-
+		
+		Terraform :::
+		
+			Terminologies :
+			
+				Terraform Project 
+				
+				Terraform Registry 		# Terraform Registry :: https://registry.terraform.io/?product_intent=terraform
+				
+				Terraform Providers 
+				
+				#Terraform Statefile 
+				
+				
+			Server :(Windows/Linux/Mac)					Provision the Target Resource 
+			
+				Install Terraform 
+				
+				Terraform Project 
+					*.tf
+					
+		
+			Working with Terraform :::
+			
+			
+				1. Install Terraform - (Windows/Linux/Mac)	
+					https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+					
+					On Windows Machine :
+					
+						goto Manual Installation -- Appropriate package 
+						select Windows - amd64 version
+							download zipfile & extract 
+								- get terraform application
+							Setup the environment variable to access terraform application
+							 - from windows start menu - search for edit system environment variables 
+							 
+							 - in System Properties Dialog
+								- select Environment Variables
+									- under system variables 
+										- select path & edit
+											- add terraform application path and apply the changes
+											
+				2. Visual Studio Code IDE 	
+						# https://code.visualstudio.com/download
+						
+					- Install Visual Studio Code 
+					
+						- Open VS Code & Goto to Extensions 
+							Search for Azure & HashiCorp Terraform Extension & Install it on VS Code.
+						
+						
+					- Create a Project Folder 
+					
+					- Open New Termincal
+					
+						Execute Terraform cli Commands:
+						
+							- terraform --version
+							
+				
+				3. Working with Terraform Projects :::
+				
+						https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+					
+				4. Create Access Key and Secret Key from AWS Account --> Security Credentials 
+				
+							A
+							AV
+						
+						
+						
+						AWS / Azure Cloud 
