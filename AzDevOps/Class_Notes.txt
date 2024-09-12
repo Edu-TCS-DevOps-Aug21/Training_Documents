@@ -985,3 +985,208 @@ Terraform :::
 						
 						
 						AWS / Azure Cloud 
+
+
+						
+#########################
+Day - 16 | 12th Sep. 2024
+#########################	
+
+	Using Terraform to provision Azure Cloud Resource!
+	
+	Create Terraform Script for Azure Resource !
+	
+provider.tf 
+	
+terraform {
+  required_providers {
+    azurerm={
+        source = "hashicorp/azurerm"
+        version = "4.1.0"
+    }
+  }
+}
+
+provider "azurerm" {
+    subscription_id = "ae1e092a-8e35-4b61-8fce-7b200e7b729a"
+    tenant_id = "7ebca763-b9d8-4de8-bd9a-1ca01c201282"
+    client_id = "49482f9e-1dca-437b-9862-e8032c66e46d"
+    client_secret = "f91b49e1-fdcb-41b9-8305-8e2bd10dc7ce"
+    features {}
+}
+
+main.tf
+
+resource "azurerm_resource_group" "terraformrg1" {
+    name = "tcsterraformrg1"
+    location = "Central India"
+  
+}
+
+
+	Terraform Statefile :::
+	
+		statefile Management.
+		
+		Statefile should be maintained in the source code repository
+		
+		
+		
+		terraform statefile import!
+		
+			- Used to generate a new state file based on the actual resource id manually
+			
+			
+			
+		Ansible Controller :
+		
+			Requirement :
+			
+				Using Ansible Configure Slave Node.
+				
+				
+				
+				
+		Ansible to Configure  Slave Node.
+		
+		Ansible Controller (VM):
+		
+		Jenkins_Master 	==> jdk,jenkins,git 
+		
+			Jenkins_Slave ==> git,jdk,maven(installation can be done thru ansible)
+			
+			Ansible Playbook 
+		
+		
+		Azure Build Pipeline :::
+		
+			- Create Application Artifacts 
+			- Publish to Pipeline Artifacts 
+			- Create Docker Image 
+		
+		
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: 'default'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**/*.war'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+	
+	Created Build Pipeline :
+	
+		- Created Application Artifacts in the Self-hosted Agent/Hosted Agent 
+		
+		- Publish the Artifacts to Pipeline Workspace Directory 
+		
+		- Create Container Registry 
+		
+		- Using Artifacts Create Container Image and Publish to Container Registry.
+		
+		
+	Next :::
+	
+		- Deployment:
+			Using Azure Release Pipeline / CICD Pipeline:
+		
+			- Directly deploy the artifacts to the target server(Web Application Server)
+			
+			- Deploy the Application Image to the Target Servers using Kubernetes
+			
+		
+		
+		
+		
+		
+	Create Release Pipeline 
+
+Build Pipeline:::
+
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: 'default'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)'
+    Contents: '**/*.war'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'test-cr-sc1'
+    repository: 'mywebapprepo1'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: 'latest'	
+	
+	To working with Docker Container :::
+	
+	
+	1. Create Container Registry from Azure Portal 
+	
+	2. Create Service Connection from the the Project Settings for this container registry.
+	
+	3. Add Docker Build&Publish Stage in pipeline 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
