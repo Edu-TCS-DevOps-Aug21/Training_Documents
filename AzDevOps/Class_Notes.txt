@@ -1175,6 +1175,127 @@ steps:
 
 
 
+						
+#########################
+Day - 17 | 13th Sep. 2024
+#########################	
+
+
+pipeline {
+
+    agent { label 'pwcslave1' }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	}
+	
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+				git 'https://github.com/Edu-TCS-DevOps-Aug21/java-mvn-springbootapp.git'
+            }
+        }
+        stage('Application_Build') {
+            steps {
+                echo 'Perform Maven Build'
+				sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+            }
+        }
+
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Publish_to_Docker_Registry') {
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+		stage('Deploy to Kubernetes') {
+            steps {
+				script {
+				sshPublisher(publishers: [sshPublisherDesc(configName: 'PoW-Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f k8sdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+			}	
+            }
+		}
+    }
+}
+
+
+
+	Pipeline1 : SCM_Check --> Build --> Automated Unit Testing --> Generate the Unit Test Report --> Deploy to (QA)WebApp Server
+	
+	Pipeline2 : SCM_Check --> Automated QA Testing --> Generate the QA Test Report --> Deploy to (UAT)WebApp Server
+
+	Pipeline3 : SCM_Check --> Automated UAT Testing --> Generate the UAT Test Report -----------> Deploy to (PROD)WebApp Server
+																						(Cd/CD)
+
+	Continuous Deployments Strategies ::
+
+
+	Pipeline1 : SCM_Check --> Build --> Automated Unit Testing --> Generate the Unit Test Report --> Deploy to (QA)WebApp Server
+	
+				Automated QA Testing --> Generate the QA Test Report --> Deploy to (UAT)WebApp Server
+
+				Automated UAT Testing --> Generate the UAT Test Report -----------> Deploy to (PROD)WebApp Server
+																		   (CD)
+
+
+	Selenium :::
+	
+	Selenium Grid :::
+		- Used to do the parallel Testing 
+	
+	
+	Web_Page! 
+	
+	Test Web Page ????
+	
+	Accessiblity
+		Desktop 
+		Mobile 
+		Tablet Device 
+		
+		Operating :: Windows/Mac/Linux/Android.....
+		
+		Browser ::	chorme / Edge / Mozilla Firefox.,,,
+		
+	Functions 
+	Contents 
+	Hyperlinks 
+	Response Time 
+
+
+
+Introduction to AWS DevOps Services :::
+
+	IAM Service :::
+	
+		root user! at the Account level 
+			- Email_ID 
+			- Password 
+			
+		Create IAM User
+		Add the User to User Group 
+		Assign the Policies to the User/Group 
+		
+		
+		
+		AWS Resources can be accessed using :
+			AWS Console 
+			AWS CLI / API calls 
+
 
 
 
