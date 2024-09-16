@@ -1,0 +1,58 @@
+
+#########################
+Day - 17 | 13th Sep. 2024
+#########################	
+
+
+Introduction to AWS DevOps Services :::
+
+	IAM Service :::
+	
+		root user! at the Account level 
+			- Email_ID 
+			- Password 
+			
+		Create IAM User
+		Add the User to User Group 
+		Assign the Policies to the User/Group 
+		
+		
+		
+		AWS Resources can be accessed using :
+			AWS Console 
+			AWS CLI / API calls 
+
+
+#########################
+Day - 18 | 16th Sep. 2024
+#########################	
+
+	- DevOps of AWS
+	
+	- AWS CodeCommit :
+		- Git based SCM Service!
+
+
+	Code Commit 		# Repo Management 
+	
+	Code Build 			# Perform Automated Builds
+	
+	Code Deploy			# Deployment tool used to deploy the application artifacts to the target environment 
+	
+	Code Pipeline 		# CICD - Build Orchestration Tool 
+						# It composed of CodeCommit, CodeBuild and CodeDeploy 
+						# Automated Triggers 
+						# Attach SNS 
+						# AWS Cloudwatch 
+
+
+	Code Deploy ::
+	
+		1. Create a IAM Role for Code Deploy. 
+		
+		2. Create a IAM Role for S3 to get full access and attach to EC2 Instance 
+				- Create IAM Policy for s3 Bucket full access 
+				- Create IAM Role and add this policy. 
+				
+		
+			
