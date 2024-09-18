@@ -56,3 +56,178 @@ Day - 18 | 16th Sep. 2024
 				
 		
 			
+			
+#########################
+Day - 19 | 17th Sep. 2024
+#########################
+
+
+	Code Deploy 
+	
+	Code Pipeline 
+
+
+	Code Deploy ::
+	
+		1. Create a IAM Role for Code Deploy. 
+		
+		2. Create a IAM Role for S3 to get full access and attach to EC2 Instance 
+				- Create IAM Policy for s3 Bucket full access 
+				- Create IAM Role and add this policy. 
+
+https://docs.aws.amazon.com/general/latest/gr/s3.html
+
+		3. Deployment Agent : tcs_java-web_app_server1
+
+https://docs.aws.amazon.com/codedeploy/latest/userguide/codedeploy-agent-operations-install-ubuntu.html
+
+tcs_app_proj1_bkt1
+
+
+tcs_webapp_pipeline1
+
+
+CICD Pipeline ::::
+
+	Pipeline / CodeDeploy :
+	
+		Target environments!
+		
+		Manual Configuration 
+		
+		IAC Tool :
+		
+			Terraform ::	
+				- Is IAC Tool to provision/Manage the Any Resources in multi-cloud/On-Prem.
+				
+			CloudFormation Templates ::::
+				- Is IAC Tool to provision/Manage the AWS Resources.
+				- CloudFormation Scripts are written using json**/ygdsfdxzxzyctdt ddrtdml.
+
+		AWS CodePipeline :::
+		
+			SCM_Checkout -> Build -> Deployed
+			
+			
+			Tomcat web application server :::
+				webapp	Folder ==> compare this folder as Elastic BeanStalk
+				
+			
+
+#########################
+Day - 20 | 18th Sep. 2024
+#########################
+
+
+	Demo using CloudFormation / Terraform 
+	
+	Monitoring Tools - AWS CloudWatch / CloudTrail / Prometheus/Grafana Setup
+	
+
+
+	How to use  Cloudformation on DevOps Perspective :::
+	
+	CI/CD Pipeline using CodePipeline Service 
+	
+	SCM_Checkout -> Build -> Deployed(Test) -> Upon Testing, Delete the Test_Server created by CFT
+
+
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+      "myInstance": {
+          "Type": "AWS::EC2::Instance",
+          "Metadata" : {
+            "AWS::CloudFormation::Init": {
+              "config": {
+                "packages": {
+                  "yum": {
+                    "httpd" : []
+                  }
+                },
+                "files": {
+                  "/var/www/html/index.html": {
+                    "content" : {"Fn::Join" : ["",[ "This is created by cfn-init" ] ]},
+                    "mode"  : "000644",
+                    "owner" : "root",
+                    "group" : "root"
+                  }
+                },
+                "commands": {
+                  "StratApache":{
+                    "command" : "service httpd start"
+                  }
+                }
+              }
+            }
+          },
+          "Properties": {
+              "KeyName": "may20-keypair",
+              "ImageId": "ami-067aaeea6813afbde",
+              "InstanceType" : "t2.micro",
+              "UserData": {
+                  "Fn::Base64": {
+                      "Fn::Join": [
+                          "",
+                          [
+                            "#!/bin/bash -ex\n",
+                            "yum install -y aws-cfn-bootstrap\n",
+                            "# Install the files and packages from the metadata\n",
+                            "/opt/aws/bin/cfn-init -v ",
+                            "         --stack ", { "Ref" : "AWS::StackName" },
+                            "         --resource myInstance ",
+                            "         --region ", { "Ref" : "AWS::Region" }, "\n",
+                            "# Signal the status from cfn-init\n",
+                            "/opt/aws/bin/cfn-signal -e $? ",
+                            "         --stack ", { "Ref" : "AWS::StackName" },
+                            "         --resource myInstance",
+                            "         --region ", { "Ref" : "AWS::Region" }, "\n"
+                          ]
+                      ]
+                  }
+              }
+      },
+      "CreationPolicy" : {
+        "ResourceSignal" : {
+          "Timeout" : "PT5M"
+        }
+      }
+              }
+    }
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             	
+Monitoring Tools - AWS CloudWatch / CloudTrail / Prometheus/Grafana Setup ::	
+
+
+	Architecture of Monitoring Tools:
+	
+		Prometheus/Grafana/Dyna-trace/AWS Cloud Watch/Azure Monitor
+		
+		
+	Monitoring Tools :;
+	
+		Managed Service Providers : 
+
+			AWS Cloud Watch/Azure Monitor
+
+		Self Managed Monitoring Servers ::
+		
+			Prometheus/Grafana/Dyna-trace
+			
+		
+		Monitoring_Server 			== # Install the Monitroing Tool(Prometheus)
+			Client_Machines 		== # Install the Monitoring Tool Agent
+
+
+	Grafana :
+			Infra-Structure Monitoring
+					Prometheus/Grafana/Dyna-trace
+					
+			Application Monitoring 
+					App-Dynamics / DataDog 
+		
+
+
+
+
+
+
