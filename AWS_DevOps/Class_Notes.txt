@@ -228,6 +228,144 @@ Monitoring Tools - AWS CloudWatch / CloudTrail / Prometheus/Grafana Setup ::
 
 
 
+#########################
+Day - 21 | 19th Sep. 2024
+#########################
+
+	AWS ElasticBeanStalk
+	
+	ECR 
+	
+	Connect to AWS using AWS CLI 
+	
+	work with docker images and publish to ECR 
+
+
+Next ::
+
+	Project and Assignments :::
+	
+		- Azure Pipeline - build & release pipeline 	any one project
+		
+		- AWS Pipeline Service 							one project
+		
+		- Open-Source DevOps Project					one project
+	
+	Assignments :::
+
+
+
+Docker Commit :::
+
+	- Used to create an Image based on the existing container.
+	
+	
+AMI :
+
+	- Create New AMI using the existing VM 
+	
+	
+	Kubernetes --> Replicaset --> to replicate the pod instances 
+
+
+	Auto-Scaling ::
+	
+		Horizontal scaling
+			--> Process of Adding more nodes 
+		
+		Vertical Scaling 
+			--> Process of Adding more Pods  
+
+
+	Prod environment - Deployment Group : 10 Prod_servers 
+	
+		Horizontal scaling
+			--> Process of Adding more servers to the Deployment Group  
+		
+		Vertical Scaling 
+			--> Process of Adding more Configurations to the existing servers in Deployment Group  
+
+-->
+
+	AWS ElasticBeanStalk
+	
+	ECR 
+	
+	Connect to AWS using AWS CLI 
+	
+	work with docker images and publish to ECR 
+	
+	
+	
+	On the Build Server :
+	
+		Install and Setup the AWS Cli
+		
+		aws configure 		To configure the credential.
+			- Access Key 
+			- Secret Key 
+			- Default Region 
+			
+		Python scripts ==> to handle aws resources 
+		boto3 
+	
+
+
+loksaieta/sa-webappimg
+
+Retrieve an authentication token and authenticate your Docker client to your registry. Use the AWS CLI:
+
+
+Install AWS CLI 
+
+aws configure 
+
+
+
+A
+
+ZvC
+
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 471112633224.dkr.ecr.ap-south-1.amazonaws.com
+
+Note: If you receive an error using the AWS CLI, make sure that you have the latest version of the AWS CLI and Docker installed.
+
+Build your Docker image using the following command. For information on building a Docker file from scratch see the instructions here . You can skip this step if your image is already built:
+
+docker build -t tcsecimgrepo1 .
+
+After the build completes, tag your image so you can push the image to this repository:
+
+docker tag tcsecimgrepo1:latest 471jjkjkj3224.dkr.ecr.ap-south-1.amazonaws.com/tcsecimgrepo1:latest
+
+docker tag loksaieta/sa-webappimg:v1.0 471jjkjkj3224.dkr.ecr.ap-south-1.amazonaws.com/tcsecimgrepo1:latest
+
+
+Run the following command to push this image to your newly created AWS repository:
+
+docker push 471jjkjkj3224.dkr.ecr.ap-south-1.amazonaws.com/tcsecimgrepo1:latest
+
+
+
+Next :::
+
+	Azure Pipeline ::
+	
+		- Build Pipeline 	# Completed 
+		
+		- Release Pipeline  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
