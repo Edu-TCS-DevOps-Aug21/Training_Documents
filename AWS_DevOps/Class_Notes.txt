@@ -356,6 +356,150 @@ Next :::
 		- Release Pipeline  
 
 
+#########################
+Day - 22 | 20th Sep. 2024
+#########################
+
+	
+	Azure DevOps Pipeline ::
+	
+		Terraform 
+		
+		AWS / Azure Resources! 
+		
+	
+
+
+
+	Terraform 
+		
+		Azure Resources! 
+		
+		
+		Install Azure Cli 			# Is a Command Line Utility to manage the Azure resource from external terminals/shell
+
+			https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli
+
+			az --version 			
+			
+			
+			
+			az login --tenant 7ebca763-b9d8-4de8-bd9a-1ca01c201282			# Goto to Active Directory Service  to get the tenent ID 
+																			# Goto to Subscription and verify the Subscription_ID
+			
+			az account show
+			
+			
+			terraform --version 
+			
+			terraform init 
+			
+			terraform plan 
+			
+			terraform apply 
+
+
+
+	CI/CD Pipeline ::
+	
+		Azure Pipeline - Container - Kubernetes 
+
+			Azure 	- perform build 
+			
+			AWS 	- Deploy 			
+			
+		On Azure Project :
+		
+			Create Service Connection!
+			
+			Azure Container Registry! 
+				- Service Connection from AzDevOps Project to AzContainer Registry 
+
+
+
+	Service Account :::
+	
+		- DockerHub 
+		
+		- KubernetesMaster Node (AWS)
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+
+resources:
+- repo: self
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: default
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+- task: CopyFiles@2
+  inputs:
+    Contents: '**/*.war'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'mywebapp'
+    publishLocation: 'Container'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'loksaietadkrhub'
+    repository: 'loksaieta/tcsazimg'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: 'latest'
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifact: 'k8sconfigfiles'
+    publishLocation: 'pipeline'
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'KMasterAWSSC1'
+    sourceFolder: '$(System.DefaultWorkingDirectory)'
+    contents: '**/k8smvndeployment.yaml'
+    targetFolder: '/home/devopsadmin'
+    readyTimeout: '20000'
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'KMasterAWSSC1'
+    runOptions: 'commands'
+    commands: 'kubectl apply -f k8smvndeployment.yaml'
+    readyTimeout: '20000'
+	
+	
+	
+	
+	
+	AMI -> 
+	
+	VM - Install all the required tools 
+	
+	Create New AMI 
+
+	Terraform Script, use this ami to create a vm 
+
+
+	sh 'terraform init'
+	
+	
+	
+	sh 'terraform plan'
+	
+	sh 'terraform apply'
+	
 
 
 
