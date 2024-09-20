@@ -58,3 +58,27 @@ Change http tp https as shown below ::
 3.110.159.176
 
 https://15.207.98.160:32578/
+
+##########################################################################################################3
+
+helm search hub Prometheus
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/prometheus
+kubectl get all
+kubectl get service
+kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext
+#kubectl edit svc prometheus-server
+kubectl get service
+kubectl get pods --all-namespaces
+helm search hub grafana
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install grafana grafana/grafana
+kubectl get service
+kubectl expose service grafana --type=NodePort --target-port=3000 --name=grafana-ext
+
+
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
